@@ -14,3 +14,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.layout-bg {
+  background-image: url("nodesend-bg.jpeg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+}
