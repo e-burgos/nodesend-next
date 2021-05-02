@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Layout from '../components/Layout'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import authContext from '../context/auth/authContext';
+import Alert from '../components/Alert';
 
-const NewAccount = () => {
+const NewAccount = (props) => {
+
+  // Hacemos disponible el context de auth
+  const authenticateContext = useContext(authContext);
+  const { messageError, message, registerUser } = authenticateContext;
+
 
   // Formulario y validacion con formik
   const formik = useFormik({
@@ -18,7 +25,7 @@ const NewAccount = () => {
       password: Yup.string().required('La contraseña es obligatoria').min(6, 'La contraseña debe tener al menos 6 caracteres'),
     }),
     onSubmit: (values) => {
-      console.log(values)
+      registerUser(values)
     }
   }); 
 
@@ -29,6 +36,7 @@ const NewAccount = () => {
 
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-lg">
+            {message && <Alert /> || messageError && <Alert />}
             <form 
               className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
               onSubmit={formik.handleSubmit}
@@ -81,7 +89,7 @@ const NewAccount = () => {
                 <label 
                   className="block text-black text-sm font-bold mb-2"
                   htmlFor="password"
-                >Nombre</label>
+                >Contraseña</label>
                 <input 
                   type="password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring  focus:shadow-outline"

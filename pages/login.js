@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import authContext from '../context/auth/authContext';
+import Alert from '../components/Alert';
+import { useRouter } from 'next/router';
 
 const Login = () => {
+
+  // Hacemos disponible el context de auth
+  const authenticateContext = useContext(authContext);
+  const { message, messageError, auth, loginUser } = authenticateContext;
+
+  // Definimos Next Router
+  const router = useRouter();
+
+  // Veificamos el estado de auth
+  useEffect(() => {
+    if(auth){
+      router.push('/')
+    } 
+  }, [auth])
 
   // Formulario y validacion con formik
   const formik = useFormik({
@@ -16,7 +33,7 @@ const Login = () => {
       password: Yup.string().required('Debes ingresar tu contraseña').min(6, 'Recuerda que tu contraseña debe tener al menos 6 caracteres'),
     }),
     onSubmit: (values) => {
-      console.log(values)
+      loginUser(values)
     }
   }); 
 
@@ -27,6 +44,7 @@ const Login = () => {
 
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-lg">
+            {message && <Alert /> || messageError && <Alert />}
             <form 
               className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
               onSubmit={formik.handleSubmit}
@@ -57,7 +75,7 @@ const Login = () => {
                 <label 
                   className="block text-black text-sm font-bold mb-2"
                   htmlFor="password"
-                >Nombre</label>
+                >Contraseña</label>
                 <input 
                   type="password"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring  focus:shadow-outline"
