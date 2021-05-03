@@ -12,7 +12,7 @@ const Header = () => {
         <header className="py-8 flex flex-col md:flex-row items-center justify-between">
             <div>
                 <Link href="/">
-                    <img className="w-64 md-8 md:mb-0" src="logo.svg" />
+                    <img className="w-64 md-8 md:mb-0 pb-2" src="logo.svg" />
                 </Link>
             </div>
             <div>
@@ -20,7 +20,7 @@ const Header = () => {
                     <div className="flex items-center">
                         <p className="me-2"> Hola {user.name}</p>
                         <button
-                            className=" px-4 py-2 mx-1 text-black border-black uppercase font-bold rounded"
+                            className="px-4 py-2 mx-1 text-black border-black uppercase font-bold rounded"
                             onClick={() => logoutUser()}
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
