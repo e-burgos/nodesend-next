@@ -6,7 +6,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     AUTH_USER,
-    LOGOUT_USER
+    LOGOUT_USER,
     } from '../../types';
 
 const authReducer = (state, action) => {
@@ -33,6 +33,7 @@ const authReducer = (state, action) => {
             return {
                 ...state,
                 user: action.payload,
+                auth: true
             }
         case SUCCESS_ALERT:
             return {

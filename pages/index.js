@@ -5,8 +5,12 @@ import Link from 'next/link';
 import Dropzone from '../components/Dropzone';
 import appContext from '../context/app/appContext';
 import Alert from '../components/Alert';
+import { useRouter } from 'next/router';
 
 const Index = () => {
+
+  // Routing
+  const router = useRouter();
 
   // Hacemos disponible el context de auth
   const authenticateContext = useContext(authContext);
@@ -14,11 +18,19 @@ const Index = () => {
 
   // Hacemos disponible el context de auth
     const AppContext = useContext(appContext);
-    const { alert, url } = AppContext;
+    const { alert, url, clearState } = AppContext;
 
   useEffect(() => {
-    authenticateUser();
+    const token = localStorage.getItem('token');
+    if(token){
+      authenticateUser();
+    };
   }, [])
+
+  const backHome = () => {
+      router.push('/');
+      clearState();
+  }
 
   return ( 
     <Layout>
@@ -28,11 +40,18 @@ const Index = () => {
             <div className="lg:flex md:shadow-lg p-5 bg-white rounded-lg py-10 flex flex-col items-center justify-center">
               <p className="text-2xl font-sans text-center font-bold text-gray-800 uppercase">Tu enlace es: </p>
               <span className="text-2xl">{`${process.env.REACT_APP_FRONTEND_URL}/links/${url}`}</span>
-              <button 
+              <div className="flex items-center justify-center">
+                <button 
                 type="button" 
                 className="border-2 border-red-400 px-4 mt-3 py-2 mx-1 text-red-400 uppercase font-bold rounded hover:bg-black hover:text-white hover:border-white"
                 onClick={() => { navigator.clipboard.writeText(`${process.env.REACT_APP_FRONTEND_URL}/links/${url}`) }}
                 >Copiar Enlace</button>
+                <button
+                    type="button"
+                    onClick={() => backHome()} 
+                    className="border-2 border-black px-4 mt-3 py-2 mx-1 text-black uppercase font-bold rounded hover:bg-blue-500 hover:text-white hover:border-white"
+                >Subir Más</button>
+              </div>
             </div>
           </div>
         ) : (

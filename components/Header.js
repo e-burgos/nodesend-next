@@ -1,19 +1,41 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Link from 'next/link';
 import authContext from '../context/auth/authContext';
+import appContext from '../context/app/appContext';
+import { useRouter } from 'next/router'
 
 const Header = () => {
 
+    // Routing
+    const router = useRouter();
+
     // Hacemos disponible el context de auth
     const authenticateContext = useContext(authContext);
-    const { user, logoutUser } = authenticateContext;
+    const { user, authenticateUser, logoutUser } = authenticateContext;
+
+    // Hacemos disponible el context de app
+    const AppContext = useContext(appContext);
+    const { clearState } = AppContext;
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token){
+            authenticateUser();
+        };
+    }, [])
+
+    const backHome = () => {
+        router.push('/');
+        clearState();
+    }
     
     return ( 
         <header className="py-8 flex flex-col md:flex-row items-center justify-between">
             <div>
-                <Link href="/">
-                    <img className="w-64 md-8 md:mb-0 pb-2" src="logo.svg" />
-                </Link>
+                <img
+                    onClick={() => backHome()} 
+                    className="w-64 md-8 md:mb-0 pb-2 cursor-pointer" src="/logo.svg" 
+                />
             </div>
             <div>
                 { user ? ( 

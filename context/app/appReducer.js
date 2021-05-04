@@ -5,7 +5,10 @@ import {
     CREATE_LINK_SUCCESS,
     CREATE_LINK_ERROR,
     CLEAR_ALERT,
-    SHOW_ALERT
+    SHOW_ALERT,
+    CLEAR_STATE,
+    ADD_PASSWORD,
+    ADD_DOWNLOAD
 } from '../../types';
 
 const appReducer = (state, action) => {
@@ -47,6 +50,28 @@ const appReducer = (state, action) => {
             return {
                 ...state, 
                 alert: action.payload,
+            }
+        case CLEAR_STATE:
+            return {
+                ...state,
+                alert: null,
+                file_name: '',
+                file_original_name: '',
+                loading: null,
+                download: 1,
+                autor: null,
+                password: '',
+                url: ''
+            }
+        case ADD_PASSWORD:
+            return {
+                ...state,
+                password: action.payload
+            }
+        case ADD_DOWNLOAD:
+            return {
+                ...state,
+                download: action.payload
             }
         default:
             return state

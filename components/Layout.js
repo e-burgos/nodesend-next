@@ -8,7 +8,7 @@ const Layout = ({children}) => {
         <>
             <Head>
                 <title>React NodeSend</title>
-                <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+                <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" content-type="text/css" />
             </Head>
 
             <div className="bg-gray-100 layout-bg min-h-screen">
@@ -18,8 +18,8 @@ const Layout = ({children}) => {
                         {children}
                     </main>
                 </div>
-            </div>
-            <Footer/>
+                <Footer/>
+            </div>  
         </>
      );
 }

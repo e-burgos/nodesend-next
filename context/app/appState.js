@@ -8,7 +8,10 @@ import {
     CREATE_LINK_SUCCESS,
     CREATE_LINK_ERROR,
     CLEAR_ALERT,
-    SHOW_ALERT
+    SHOW_ALERT,
+    CLEAR_STATE,
+    ADD_PASSWORD,
+    ADD_DOWNLOAD
 } from '../../types';
 import axiosClient from '../../config/axios';
 import { array } from 'yup';
@@ -93,6 +96,28 @@ const AppState = (props) => {
         }
     }
 
+    const clearState = () => {
+        dispatch({
+            type: CLEAR_STATE
+        })
+    }
+
+    // Modificar state de password
+    const addPassword = password => {
+        dispatch({
+            type: ADD_PASSWORD,
+            payload: password
+        })
+    }
+
+    // Modificar state de download
+    const addDownload = download => {
+        dispatch({
+            type: ADD_DOWNLOAD,
+            payload: download
+        })
+    }
+
     return ( 
         <appContext.Provider
             value={{
@@ -107,6 +132,9 @@ const AppState = (props) => {
                 showAlert,
                 uploadFiles,
                 createLink,
+                clearState,
+                addPassword,
+                addDownload
             }}
         >
             {props.children}

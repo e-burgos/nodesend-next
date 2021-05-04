@@ -11,7 +11,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     AUTH_USER,
-    LOGOUT_USER
+    LOGOUT_USER,
     } from '../../types';
 
 const AuthState = (props) => {
@@ -81,10 +81,12 @@ const AuthState = (props) => {
         };
         try {
             const response = await axiosClient.get('/api/auth')
-            dispatch({
-                type: AUTH_USER,
-                payload: response.data.user
-            })
+            if(response.data.user){
+                dispatch({
+                    type: AUTH_USER,
+                    payload: response.data.user
+                })
+            }
         } catch (error) {
             dispatch({
                 type: LOGIN_ERROR,

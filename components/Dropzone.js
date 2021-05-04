@@ -2,6 +2,7 @@ import React, { useContext, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import appContext from '../context/app/appContext';
 import authContext from '../context/auth/authContext';
+import OptionsForm from './OptionsForm';
 
 const Dropzone = () => {
 
@@ -11,7 +12,7 @@ const Dropzone = () => {
 
     // Hacemos disponible el context de auth
     const authenticateContext = useContext(authContext);
-    const { user } = authenticateContext;
+    const { user, auth } = authenticateContext;
 
     // Rechazar archivos cuando excede el tamaño
     const onDropRejected = () => {
@@ -46,19 +47,21 @@ const Dropzone = () => {
     return ( 
         <div className="md:flex-1 mb-3 mx-2 mt-16 px-4 lg:mt-0 flex flex-col items-center justify-center border-dashed border-gray-400 border-2 bg-gray-100 rounded-lg">   
             {acceptedFiles.length > 0 ? (
-                    <div className="flex flex-col items-center justify-center w-full py-32">
+                    <div className="flex flex-col items-center justify-center w-full min-h-100">
                         <ul>{files}</ul>
-                        {loading ? <img className="w-32" src="upload_file.gif" /> 
-                        :   (<button
+
+                        {auth ? <OptionsForm /> : null}
+
+                        {loading ? <img className="w-32" src="/upload_file.gif" /> 
+                        :   (
+                            <button
                                 type="button"
                                 onClick={() => createLink()} 
                                 className="border-2 border-blue-500 px-4 mt-3 py-2 mx-1 text-blue-500 uppercase font-bold rounded hover:bg-black hover:text-white hover:border-white"
                             >Crear Enlace</button>
                             )
                         }
-                        
                     </div>
-
                 ) : (
                     <div {...getRootProps( {className: 'dropzone w-full py-32'} )}>
                         <input className="h-100" {...getInputProps()} />
