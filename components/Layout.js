@@ -10,10 +10,9 @@ const Layout = ({children}) => {
                 <title>React NodeSend</title>
                 <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" content-type="text/css" />
             </Head>
-
             <div className="bg-gray-100 layout-bg min-h-screen">
+                <Header />
                 <div className="container mx-auto">
-                    <Header />
                     <main className="mt-20">
                         {children}
                     </main>

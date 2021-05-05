@@ -1,8 +1,9 @@
-import React,{ useState, useContext } from 'react';
+import React,{ useState, useContext, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import axiosClient from '../../config/axios';
 import appContext from '../../context/app/appContext';
 import Alert from '../../components/Alert';
+import { useRouter } from 'next/router';
 
 // Leer un enlace disponible y actual que se consulte mediente props.params
 export async function getServerSideProps({params}) {
@@ -38,12 +39,20 @@ export async function getServerSidePaths() {
 
 const Link = ({link}) => {
 
+    // Routing 
+    const router = useRouter();
+
     // Hacemos disponible el context de auth
     const AppContext = useContext(appContext);
     const { alert, showAlert } = AppContext;
 
     const [checkPass, setCheckPass] = useState(link.password);
     const [password, setPassword] = useState('');
+    const [checkDownload, setCheckDownload] = useState(link.download);
+
+    // useEffect(() => {
+    //     currentDownload();
+    // }, [checkDownload])
 
     const validatePassword = async e => {
         e.preventDefault();
@@ -54,13 +63,23 @@ const Link = ({link}) => {
         try {
             const response = await axiosClient.post(`/api/links/${link.url}`, data)
             //console.log(response.data.password)
-            if(!response.data.password){
-                setCheckPass(false)
-            }
+            setCheckPass(response.data.password)
         } catch (error) {
-            showAlert(error.response.data.password)
-            
-            
+            showAlert(error.response.data.msg)
+        }
+    }
+
+    const currentDownload = async () => {
+        const response = await axiosClient.get(`/api/links/${link.url}`)
+        setCheckDownload(response.data.download);
+    }
+
+    const downloadFile =  () => {
+        setCheckDownload(checkDownload -1);
+        if(link.download === 1){
+            setTimeout(() => {
+                router.push('/')
+            }, 1000) 
         }
     }
 
@@ -68,7 +87,7 @@ const Link = ({link}) => {
         <Layout>
             <>
             {checkPass ? (
-                <div className="md:w-4/5 xl:3/5 mx-auto mb-32">
+                <div className="md:w-4/5 xl:3/5 mx-auto pb-32">
                     <div className="flex w-full justify-center">
                         {alert && <Alert />}
                     </div>  
@@ -95,14 +114,19 @@ const Link = ({link}) => {
                     
                 </div>
              ) : ( 
-                <div className="md:w-4/5 xl:3/5 mx-auto mb-32">
+                <div className="md:w-4/5 xl:3/5 mx-auto pb-32">
                     <div className="md:flex-1 mb-3 mx-2 mt-16 px-4 lg:mt-0"> 
                         <div className="lg:flex md:shadow-lg p-5 bg-white rounded-lg py-10 flex flex-col items-center justify-center">
-                        <p className="text-2xl font-sans text-center font-bold text-gray-800 uppercase">Descarga tu archivo </p>
-                        <a 
-                            href={`${process.env.REACT_APP_SERVER_URL}/api/files/${link.file}`}
-                            className="border-2 border-red-400 px-4 mt-3 py-2 mx-1 text-red-400 uppercase font-bold rounded hover:bg-black hover:text-white hover:border-white"
+                        <p className="text-2xl font-sans text-center font-bold text-gray-800 uppercase">Descarga tu archivo</p>
+                        <p className="text-sm font-sans text-center font-semibold text-gray-800 uppercase">Tienes <span className="text-red-500 font-bold">{checkDownload}</span> descargas disponibles</p>
+                        {checkDownload !== 0 ? 
+                            <a 
+                                onClick={() => downloadFile()}
+                                href={`${process.env.REACT_APP_SERVER_URL}/api/files/${link.file}`}
+                                className="border-2 border-red-400 px-4 mt-3 py-2 mx-1 text-red-400 uppercase font-bold rounded hover:bg-black hover:text-white hover:border-white"
                             >Aquí</a>
+                        : null}
+                        
                         </div>
                     </div>
                 </div>

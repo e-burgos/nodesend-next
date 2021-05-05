@@ -7,6 +7,7 @@ import {
     LOGIN_ERROR,
     AUTH_USER,
     LOGOUT_USER,
+    GET_LINKS_SUCCESS,
     } from '../../types';
 
 const authReducer = (state, action) => {
@@ -53,6 +54,11 @@ const authReducer = (state, action) => {
                 token: '',
                 auth: null,
                 user: null,
+            }
+        case GET_LINKS_SUCCESS:
+            return {
+                ...state,
+                links: action.payload
             }
         default:
             return state

@@ -12,6 +12,7 @@ import {
     LOGIN_ERROR,
     AUTH_USER,
     LOGOUT_USER,
+    GET_LINKS_SUCCESS,
     } from '../../types';
 
 const AuthState = (props) => {
@@ -23,6 +24,7 @@ const AuthState = (props) => {
         user: null,
         message: null,
         messageError: null,
+        links: [],
     };
 
     // Definir reducer
@@ -121,6 +123,18 @@ const AuthState = (props) => {
         })
     }
 
+    const accountLinks = async (userId) => {
+        try {
+            const response = await axiosClient.get(`/api/links/user/${userId}`)
+            dispatch({
+                type: GET_LINKS_SUCCESS,
+                payload: response.data.links
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return ( 
         <AuthContext.Provider
             value={{
@@ -129,10 +143,12 @@ const AuthState = (props) => {
                 user: state.user,
                 message: state.message,
                 messageError: state.messageError,
+                links: state.links,
                 registerUser,
                 loginUser,
                 authenticateUser,
                 logoutUser,
+                accountLinks,
             }}
         >
             {props.children}
